@@ -1,0 +1,12 @@
+{
+  "bookings": [
+    {
+      "id": "c43c",
+      "name": "krish",
+      "from": "Bhopal",
+      "to": "Sehore",
+      "date": "2025-12-09",
+      "seats": "2"
+    }
+  ]
+}
