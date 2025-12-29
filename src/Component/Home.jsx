@@ -1,5 +1,6 @@
 import React from "react";
 import './TrainBookingApp'
+import { Outlet, Link } from "react-router-dom";
 
 
 const Home = () => {
@@ -40,7 +41,7 @@ const Home = () => {
 
           <div className="mt-10 flex gap-6">
             <button className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-black px-10 py-4 rounded-xl font-bold hover:scale-105 transition shadow-xl">
-              Book Now
+              <Link to="/book">Book Now</Link>
             </button>
             <button className="border border-white/30 px-10 py-4 rounded-xl hover:bg-white/10 transition">
               Learn More

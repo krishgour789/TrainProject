@@ -2,7 +2,7 @@ import './TrainBooking.css'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TrainBooking = () => {
+const Book= () => {
   const [form, setForm] = useState({
     name: "",
     from: "",
@@ -150,5 +150,5 @@ const TrainBooking = () => {
   );
 };
 
-export default TrainBooking;
+export default Book;
 

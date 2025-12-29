@@ -1,12 +1,12 @@
 {
   "bookings": [
     {
-      "id": "c43c",
-      "name": "krish",
-      "from": "Bhopal",
-      "to": "Sehore",
-      "date": "2025-12-09",
-      "seats": "2"
+      "id": "ff21",
+      "name": "Gourav",
+      "from": "Ratlam",
+      "to": "bhopal",
+      "date": "2025-12-30",
+      "seats": "3"
     }
   ]
 }

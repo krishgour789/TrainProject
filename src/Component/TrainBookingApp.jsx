@@ -3,6 +3,7 @@ import Register from "./Loginpage";
 import LoginPage from "./Register";
 import Layout from "./Layout";
 import Home from "./Home";
+import Book from "./Book";
 function App() {
   return (
     <BrowserRouter>
@@ -10,6 +11,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/register" element={<Register />} />
           <Route path="/loginpage" element={<LoginPage />} />
+          <Route path="/book" element={<Book />} />
           <Route index  element={<Home />} />
         </Route>
       </Routes>
