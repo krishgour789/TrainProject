@@ -22,8 +22,8 @@ const Layout = () => {
 
           <nav className="hidden md:flex gap-10 text-sm font-medium">
             <a className="hover:text-emerald-400"><Link to="/">Home</Link></a>
-            <a className="hover:text-emerald-400">Routes</a>
-            <a className="hover:text-emerald-400">Pricing</a>
+            <a className="hover:text-emerald-400"><Link to="/routes">Routes</Link></a>
+            <a className="hover:text-emerald-400"><Link to="/myticket">My Tickets</Link></a>
             <a className="hover:text-emerald-400">Support</a>
           </nav>
 

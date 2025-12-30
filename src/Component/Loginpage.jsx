@@ -1,82 +1,148 @@
 import React, { useState } from "react";
-import './TrainBooking.css'
-
+import "./TrainBooking.css";
 
 export default function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
+    setMessage("");
+  };
+
+  const validate = () => {
+    if (form.name.trim().length < 3) {
+      return "Name must be at least 3 characters";
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      return "Enter a valid email address";
+    }
+
+    if (form.password.length < 6) {
+      return "Password must be at least 6 characters";
+    }
+
+    if (form.password !== form.confirmPassword) {
+      return "Passwords do not match";
+    }
+
+    return "";
+  };
 
   const handleRegister = (e) => {
     e.preventDefault();
 
-    // fetch existing users from localStorage
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // check if email already exists
-    const exists = users.find((u) => u.email === email);
-    if (exists) {
-      setMessage("Email already registered!");
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
-    // push new user
-    users.push({ name, email, password });
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    // save back to localStorage
+    const exists = users.find((u) => u.email === form.email);
+    if (exists) {
+      setError("This email is already registered");
+      return;
+    }
+
+    users.push({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+    });
+
     localStorage.setItem("users", JSON.stringify(users));
 
-    setMessage("Account created successfully!");
-    setName("");
-    setEmail("");
-    setPassword("");
+    setMessage("🎉 Account created successfully! You can login now.");
+    setForm({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
   };
 
   return (
-    <>
-   
-    <div className="max-w-sm mx-auto mt-10 bg-white shadow p-6 rounded">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Register</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-gray-200 px-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
+          Train Booking Registration
+        </h2>
+        <p className="text-center text-gray-500 mb-6">
+          Create your account to book trains easily
+        </p>
 
-      {message && <p className="text-center text-blue-600 mb-3">{message}</p>}
+        {error && (
+          <p className="text-center text-red-600 mb-3 font-medium">
+            {error}
+          </p>
+        )}
 
-      <form onSubmit={handleRegister} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="w-full p-2 border rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        {message && (
+          <p className="text-center text-green-600 mb-3 font-medium">
+            {message}
+          </p>
+        )}
 
-        <input
-          type="email"
-          placeholder="Email Address"
-          className="w-full p-2 border rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleRegister} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={form.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded"
-        >
-          Register
-        </button>
-      </form>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition"
+          >
+            Create Account
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-500 mt-5">
+          Secure • Fast • Easy Train Booking
+        </p>
+      </div>
     </div>
-    </>
   );
 }

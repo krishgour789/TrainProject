@@ -1,11 +1,64 @@
-import React from "react";
-import './TrainBookingApp'
-import { Outlet, Link } from "react-router-dom";
+import React, { useState } from "react";
+import "./TrainBookingApp";
+import { useNavigate } from "react-router-dom";
 
+/* स्टेशन लिस्ट – Auto Suggestion के लिए */
+const stations = [
+  "Delhi",
+  "Mumbai",
+  "Bhopal",
+  "Kolkata",
+  "Patna",
+  "Jaipur",
+  "Chennai",
+  "Bengaluru",
+  "Hyderabad",
+];
 
 const Home = () => {
+  const navigate = useNavigate();
 
-  
+  /* Search State */
+  const [search, setSearch] = useState({
+    from: "",
+    to: "",
+    date: "",
+  });
+
+  /* Handle Input */
+  const handleSearchChange = (e) => {
+    setSearch({
+      ...search,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /* Book Now → Login Check */
+  const handleBookNow = () => {
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+      navigate("/loginpage", { state: { from: "/book" } });
+    } else {
+      navigate("/book");
+    }
+  };
+
+  /* Search Train → Routes Page */
+  const handleSearchTrain = (e) => {
+    e.preventDefault();
+
+    if (!search.from || !search.to || !search.date) return;
+
+    navigate("/routes", {
+      state: {
+        from: search.from,
+        to: search.to,
+        date: search.date,
+      },
+    });
+  };
+
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
 
@@ -16,12 +69,10 @@ const Home = () => {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90 -z-10" />
 
-      
-
-      {/* HERO */}
+      {/* HERO SECTION */}
       <section className="px-10 lg:px-28 pt-20 pb-32 grid lg:grid-cols-2 gap-20 items-center">
 
-        {/* LEFT */}
+        {/* LEFT CONTENT */}
         <div>
           <span className="inline-block mb-4 px-5 py-1 rounded-full bg-emerald-400/20 text-emerald-300 text-sm">
             Trusted by 10M+ Travellers
@@ -40,9 +91,13 @@ const Home = () => {
           </p>
 
           <div className="mt-10 flex gap-6">
-            <button className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-black px-10 py-4 rounded-xl font-bold hover:scale-105 transition shadow-xl">
-              <Link to="/book">Book Now</Link>
+            <button
+              onClick={handleBookNow}
+              className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-black px-10 py-4 rounded-xl font-bold hover:scale-105 transition shadow-xl"
+            >
+              Book Now
             </button>
+
             <button className="border border-white/30 px-10 py-4 rounded-xl hover:bg-white/10 transition">
               Learn More
             </button>
@@ -63,29 +118,52 @@ const Home = () => {
           </div>
         </div>
 
-        {/* BOOKING CARD */}
+        {/* SEARCH CARD */}
         <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-10 shadow-2xl">
           <h2 className="text-2xl font-semibold mb-8 text-center">
             🔍 Search Trains
           </h2>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSearchTrain} className="space-y-6">
             <input
+              list="stations"
               type="text"
+              name="from"
               placeholder="From Station"
+              value={search.from}
+              onChange={handleSearchChange}
               className="w-full px-5 py-4 rounded-xl bg-black/40 outline-none placeholder-white/60"
             />
+
             <input
+              list="stations"
               type="text"
+              name="to"
               placeholder="To Station"
+              value={search.to}
+              onChange={handleSearchChange}
               className="w-full px-5 py-4 rounded-xl bg-black/40 outline-none placeholder-white/60"
             />
+
             <input
               type="date"
+              name="date"
+              value={search.date}
+              onChange={handleSearchChange}
               className="w-full px-5 py-4 rounded-xl bg-black/40 outline-none"
             />
 
-            <button className="w-full bg-gradient-to-r from-emerald-400 to-cyan-400 text-black py-4 rounded-xl font-bold hover:opacity-90 transition">
+            {/* Auto Suggestion Data */}
+            <datalist id="stations">
+              {stations.map((station) => (
+                <option key={station} value={station} />
+              ))}
+            </datalist>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-emerald-400 to-cyan-400 text-black py-4 rounded-xl font-bold hover:opacity-90 transition"
+            >
               Search Trains
             </button>
           </form>
@@ -119,25 +197,6 @@ const Home = () => {
               </div>
               <h3 className="text-lg font-semibold mb-2">{title}</h3>
               <p className="text-sm text-white/70">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="px-10 lg:px-28 pb-24">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Loved by Travellers ❤️
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {["Fast booking!", "Clean UI!", "Best train app!"].map((text) => (
-            <div
-              key={text}
-              className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md"
-            >
-              <p className="text-white/80 mb-4">“{text}”</p>
-              <span className="text-xs text-emerald-400">Verified User</span>
             </div>
           ))}
         </div>
